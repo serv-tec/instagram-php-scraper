@@ -1,7 +1,62 @@
-<p align="center">
-<a href="https://github.com/serv-tec/instagram-php-scraper/actions?query=workflow%3ATests"><img src="https://img.shields.io/github/actions/workflow/status/serv-tec/instagram-php-scraper/tests.yml?label=Tests&style=flat-square" alt="Build Status"></img></a>
-<a href="https://github.styleci.io/repos/6816335"><img src="https://github.styleci.io/repos/6816335/shield" alt="StyleCI Status"></img></a>
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="Software License"></img></a>
-<a href="https://packagist.org/packages/m4tthumphrey/php-gitlab-api"><img src="https://img.shields.io/packagist/dt/m4tthumphrey/php-gitlab-api?style=flat-square" alt="Packagist Downloads"></img></a>
-<a href="https://github.com/serv-tec/instagram-php-scraper/releases"><img src="https://img.shields.io/github/release/serv-tec/instagram-php-scraper?style=flat-square" alt="Latest Version"></img></a>
-</p>
+# Instagram PHP Scrapper
+This library based on Instagram web version. We develop it because nowadays it is hard to get approved Instagram application. 
+The purpose support every feature that web desktop and mobile version support. 
+
+## Code Example
+```php
+$instagram = Instagram::withCredentials('username', 'password');
+$instagram->login();
+$account = $instagram->getAccountById(3);
+echo $account->getUsername();
+```
+Some methods does not require auth: 
+```php
+$instagram = new Instagram();
+$nonPrivateAccountMedias = $instagram->getMedias('kevin');
+echo $nonPrivateAccountMedias[0]->getLink();
+```
+If you use auth it is recommended to cash user session, in this case you don't need run `$instagram->login()` method every time your program runs:
+
+```php
+$instagram = Instagram::withCredentials('username', 'password', '/path/to/cache/folder/');
+$instagram->login(); // will use cached session if you can force login $instagram->login(true)
+$account = $instagram->getAccountById(3);
+echo $account->getUsername();
+```
+Using proxy for requests:
+
+```php
+$instagram = new Instagram();
+Instagram::setProxy([
+    'address' => '111.112.113.114',
+    'port'    => '8080',
+    'tunnel'  => true,
+    'timeout' => 30,
+]);
+// Request with proxy
+$account = $instagram->getAccount('kevin');
+Instagram::disableProxy();
+// Request without proxy
+$account = $instagram->getAccount('kevin');
+```
+
+## Installation
+
+### Using composer
+
+```sh
+composer.phar require raiym/instagram-php-scraper
+```
+or 
+```sh
+composer require raiym/instagram-php-scraper
+```
+
+### If you don't have composer
+You can download it [here](https://getcomposer.org/download/).
+
+## Examples
+See examples [here](https://github.com/postaddictme/instagram-php-scraper/tree/master/examples).
+
+## Other
+Java library: https://github.com/postaddictme/instagram-java-scraper
